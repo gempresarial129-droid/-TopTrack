@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopTrack - Lanzamiento V1</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #007479 0%, #005a5e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 80px 60px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero h1 {
+            font-size: 5em;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #fff, #4dd0e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero .tagline {
+            font-size: 2em;
+            font-weight: 300;
+            opacity: 0.95;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .hero .agency-name {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-top: 40px;
+            color: #ffd700;
+        }
+        
+        .content-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+        
+        h2 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        
+        /* Jerarquía visual con contenedores anidados */
+        .hierarchy-container {
+            margin: 40px auto;
+            max-width: 1200px;
+        }
+        
+        .level {
+            background: rgba(255, 255, 255, 0.15);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .level:hover {
+            transform: scale(1.02);
+            border-color: #ffd700;
+        }
+        
+        .level-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .level-icon {
+            font-size: 2.5em;
+        }
+        
+        .nested {
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+        
+        .nested-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .nested-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        /* Módulos con diseño minimalista */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .module-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffd700;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .module-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .module-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+        
+        .module-subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        /* Funciones principales */
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin: 50px 0;
+        }
+        
+        .function-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .function-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .function-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .function-desc {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        
+        /* Plataformas */
+        .platform-section {
+            text-align: center;
+            margin: 60px 0;
+        }
+        
+        .platform-badges {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 2em;
+            font-weight: 700;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+        
+        .badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .badge.available {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+        
+        .badge.coming-soon {
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
+        
+        .closing {
+            text-align: center;
+            font-size: 2.8em;
+            font-weight: 300;
+            line-height: 1.6;
+            padding: 80px 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .closing strong {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3em;
+            }
+            
+            .hero .tagline {
+                font-size: 1.3em;
+            }
+            
+            h2 {
+                font-size: 2.2em;
+            }
+            
+            .nested {
+                margin-left: 15px;
+            }
+            
+            .modules-grid,
+            .functions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .closing {
+                font-size: 1.8em;
+                padding: 50px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Hero -->
+    <div class="slide">
+        <div class="container">
+            <div class="hero">
+                <h1>TopTrack</h1>
+                <p class="tagline">"Del campo al reporte, todo en tiempo real"</p>
+                <p class="agency-name">TopMktGroup</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Estructura Operativa -->
+    <div class="slide">
+        <div class="container">
+            <div class="content-card">
+                <h2>Estructura Operativa</h2>
+                
+                <div class="hierarchy-container">
+                    <!-- Nivel 1: Empresa -->
+                    <div class="level">
+                        <div class="level-title">
+                            <span class="level-icon">🏢</span>
+                            Empresa
+                        </div>
+                        
+                        <!-- Nivel 2: Campañas -->
+                        <div class="nested">
+                            <div class="level">
+                                <div class="level-title">
+                                    <span class="level-icon">📊</span>
+                                    Campañas
+                                </div>
+                                
+                                <div class="nested-group">
+                                    <div class="nested-item">📦 Inventario</div>
+                                    <div class="nested-item">🏪 Tiendas</div>
+                                </div>
+                                
+                                <!-- Nivel 3: Coordinadores -->
+                                <div class="nested">
+                                    <div class="level">
+                                        <div class="level-title">
+                                            <span class="level-icon">👔</span>
+                                            Coordinadores
+                                        </div>
+                                        
+                                        <!-- Nivel 4: Supervisores -->
+                                        <div class="nested">
+                                            <div class="level">
+                                                <div class="level-title">
+                                                    <span class="level-icon">👨‍💼</span>
+                                                    Supervisores
+                                                </div>
+                                                
+                                                <!-- Nivel 5: Personal de Campo -->
+                                                <div class="nested">
+                                                    <div class="nested-group">
+                                                        <div class="nested-item">👥 Implant</div>
+                                                        <div class="nested-item">👥 Demostradora</div>
+                                                        <div class="nested-item">👥 Promotor</div>
+                                                        <div class="nested-item">👥 Rep. Médico</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Módulos Principales -->
+    <div class="slide">
+        <div class="container">
+            <div class="content-card">
+                <h2>Módulos</h2>
+                
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <div class="module-icon">🏢</div>
+                        <div class="module-title">Empresa</div>
+                        <div class="module-subtitle">Datos básicos</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">📊</div>
+                        <div class="module-title">Campañas</div>
+                        <div class="module-subtitle">Inventario de producto, competencia y material POP</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">🛠️</div>
+                        <div class="module-title">Servicios Predefinidos</div>
+                        <div class="module-subtitle">Frentes, Material POP, Ventas, Competencia, Ventas en Dinero</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">👔</div>
+                        <div class="module-title">Coordinadores</div>
+                        <div class="module-subtitle">Datos y ubicación precisa</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">👨‍💼</div>
+                        <div class="module-title">Supervisores</div>
+                        <div class="module-subtitle">Datos y ubicación precisa</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">👥</div>
+                        <div class="module-title">Personal de Campo</div>
+                        <div class="module-subtitle">Datos y ubicación precisa</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">⏰</div>
+                        <div class="module-title">Asistencias</div>
+                        <div class="module-subtitle">Registro diario</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">📍</div>
+                        <div class="module-title">Servicios</div>
+                        <div class="module-subtitle">Check-In, Servicios Predefinidos, Check-Out</div>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">🔧</div>
+                        <div class="module-title">Recursos</div>
+                        <div class="module-subtitle">Cadenas, Códigos Postales del SPM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Funciones Principales -->
+    <div class="slide">
+        <div class="container">
+            <div class="content-card">
+                <h2>Funciones Principales</h2>
+                
+                <div class="functions-grid">
+                    <div class="function-card">
+                        <div class="function-icon">⏰</div>
+                        <div class="function-title">Asistencia Diaria</div>
+                        <div class="function-desc">
+                            <strong>Automática:</strong> Registro basado en primer Check-In y último Check-Out del día
+                            <br><br>
+                            <strong>Semiautomática:</strong> Confirmación manual del personal
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="function-icon">📍</div>
+                        <div class="function-title">Proceso de Servicios</div>
+                        <div class="function-desc">
+                            <strong>Check-In</strong> → <strong>Servicios Predefinidos</strong> → <strong>Check-Out</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="function-icon">📊</div>
+                        <div class="function-title">Importación Masiva CSV</div>
+                        <div class="function-desc">
+                            Carga rápida de <strong>Tiendas</strong> y <strong>Personal de Campo</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="function-icon">🔐</div>
+                        <div class="function-title">Permisos Dinámicos</div>
+                        <div class="function-desc">
+                            Control de acceso por usuario
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="function-icon">🗺️</div>
+                        <div class="function-title">Servicio Postal Mexicano</div>
+                        <div class="function-desc">
+                            Conexión directa con códigos postales del SPM
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Disponibilidad -->
+    <div class="slide">
+        <div class="container">
+            <div class="content-card">
+                <h2>Disponibilidad</h2>
+                
+                <div class="platform-section">
+                    <div class="platform-badges">
+                        <div class="badge available">
+                            ✓ Android
+                        </div>
+                        <div class="badge available">
+                            ✓ Web
+                        </div>
+                        <div class="badge coming-soon">
+                            ⌛ iOS
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 1.5em; margin-top: 40px; opacity: 0.95;">
+                        Próxima expansión a App Store
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Cierre -->
+    <div class="slide">
+        <div class="container">
+            <div class="closing">
+                <p>"<strong>TopTrack</strong>: La evolución digital de tu operación en campo"</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
