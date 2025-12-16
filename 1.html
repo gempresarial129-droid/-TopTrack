@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopTrack - Lanzamiento V1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
         
@@ -17,10 +18,9 @@
             font-family: 'Poppins', sans-serif;
             background: #000;
             color: #fff;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         
-        /* Animated background */
         .bg-animated {
             position: fixed;
             top: 0;
@@ -41,14 +41,11 @@
         .bg-animated::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             background: 
                 radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(0, 180, 216, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
             animation: pulse 10s ease infinite;
         }
         
@@ -57,206 +54,196 @@
             50% { opacity: 1; }
         }
         
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 40px;
+        .slides-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .slides-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .slide {
-            min-height: 100vh;
+            min-width: 100%;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 100px 0;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: slideUp 1s ease forwards;
+            padding: 60px 40px;
         }
         
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
         }
         
-        /* Hero Section */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 2.5em;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #00fff5;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .nav-button.prev { left: 30px; }
+        .nav-button.next { right: 30px; }
+        
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2em;
+            font-weight: 600;
+            z-index: 1000;
+            color: #00fff5;
+        }
+        
         .hero {
             text-align: center;
             position: relative;
         }
         
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-            z-index: -1;
-        }
-        
-        @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
         .hero h1 {
-            font-size: 8em;
+            font-size: 7em;
             font-weight: 900;
             margin-bottom: 30px;
             background: linear-gradient(135deg, #00fff5 0%, #00b4d8 50%, #ffd700 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 80px rgba(0, 255, 255, 0.5);
             letter-spacing: -3px;
             animation: glow 3s ease-in-out infinite;
         }
         
         @keyframes glow {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(0, 255, 255, 0.3)); }
-            50% { filter: brightness(1.3) drop-shadow(0 0 40px rgba(0, 255, 255, 0.6)); }
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
         }
         
         .hero .tagline {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: 300;
             opacity: 0.9;
-            line-height: 1.5;
-            margin-bottom: 40px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
         }
         
         .hero .agency-name {
-            font-size: 3em;
+            font-size: 2.8em;
             font-weight: 800;
-            margin-top: 60px;
+            margin-top: 50px;
             color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
             letter-spacing: 2px;
         }
         
-        /* Glass Card */
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 30px;
-            padding: 60px;
+            padding: 50px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 8px 32px 0 rgba(0, 0, 0, 0.37),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            max-height: 85vh;
+            overflow-y: auto;
         }
         
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
+        .glass-card::-webkit-scrollbar { width: 8px; }
+        .glass-card::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .glass-card::-webkit-scrollbar-thumb { background: rgba(0, 255, 255, 0.3); border-radius: 10px; }
         
         h2 {
-            font-size: 4.5em;
+            font-size: 3.5em;
             font-weight: 900;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             text-align: center;
             background: linear-gradient(135deg, #fff 0%, #00fff5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-        }
-        
-        /* Hierarchy 3D Visual */
-        .hierarchy-3d {
-            perspective: 1500px;
-            margin: 60px 0;
-        }
-        
-        .level-3d {
-            transform-style: preserve-3d;
-            margin: 30px 0;
-            transition: all 0.5s ease;
-        }
-        
-        .level-3d:hover {
-            transform: rotateX(5deg) scale(1.02);
         }
         
         .level-box {
             background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 180, 216, 0.1) 100%);
             border: 2px solid rgba(0, 255, 255, 0.3);
-            border-radius: 25px;
-            padding: 40px;
-            position: relative;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+            margin: 20px 0;
         }
         
         .level-box:hover {
             border-color: #ffd700;
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.6),
-                0 0 40px rgba(255, 215, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
         
         .level-header {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
-        .level-icon {
-            font-size: 4em;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
-        }
+        .level-icon { font-size: 3em; }
         
         .level-title {
-            font-size: 2.5em;
+            font-size: 2em;
             font-weight: 800;
             color: #00fff5;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
         
         .nested-3d {
-            margin-left: 60px;
-            margin-top: 30px;
+            margin-left: 40px;
+            margin-top: 20px;
         }
         
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
         
         .grid-item {
             background: rgba(255, 255, 255, 0.08);
-            padding: 25px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 15px;
             border: 2px solid rgba(255, 255, 255, 0.15);
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -264,56 +251,34 @@
         .grid-item:hover {
             background: rgba(255, 215, 0, 0.15);
             border-color: #ffd700;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transform: translateY(-3px);
         }
         
-        /* Animated Modules */
         .modules-modern {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin: 60px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
         }
         
         .module-modern {
             background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 180, 216, 0.05) 100%);
-            border-radius: 30px;
-            padding: 50px 35px;
+            border-radius: 25px;
+            padding: 35px 25px;
             text-align: center;
             border: 2px solid rgba(0, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .module-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .module-modern:hover::before {
-            left: 100%;
+            transition: all 0.4s ease;
         }
         
         .module-modern:hover {
-            transform: translateY(-15px) scale(1.05);
+            transform: translateY(-10px) scale(1.05);
             border-color: #ffd700;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.5),
-                0 0 50px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
         
         .module-icon-modern {
-            font-size: 5em;
-            margin-bottom: 25px;
-            display: inline-block;
+            font-size: 4em;
+            margin-bottom: 20px;
             transition: all 0.4s ease;
         }
         
@@ -322,250 +287,87 @@
         }
         
         .module-title-modern {
-            font-size: 2em;
+            font-size: 1.6em;
             font-weight: 800;
             color: #00fff5;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            margin-bottom: 10px;
         }
         
         .module-subtitle-modern {
-            font-size: 1.1em;
+            font-size: 0.95em;
             opacity: 0.85;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
-        /* Functions Mega Cards */
         .functions-mega {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 50px;
-            margin: 70px 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            margin: 40px 0;
         }
         
         .function-mega {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
-            border-radius: 35px;
-            padding: 60px 45px;
+            border-radius: 25px;
+            padding: 40px 30px;
             text-align: center;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        .function-mega::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #007479, #00fff5, #ffd700);
-            transform: scaleX(0);
-            transition: transform 0.5s ease;
-        }
-        
-        .function-mega:hover::after {
-            transform: scaleX(1);
+            transition: all 0.5s ease;
         }
         
         .function-mega:hover {
-            transform: translateY(-20px);
+            transform: translateY(-10px);
             border-color: #ffd700;
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.6),
-                0 0 60px rgba(255, 215, 0, 0.2);
         }
         
         .function-icon-mega {
-            font-size: 6em;
-            margin-bottom: 30px;
-            display: inline-block;
+            font-size: 4.5em;
+            margin-bottom: 20px;
             animation: float 3s ease-in-out infinite;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
         }
         
         .function-title-mega {
-            font-size: 2.3em;
+            font-size: 1.8em;
             font-weight: 800;
             color: #ffd700;
-            margin-bottom: 25px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            margin-bottom: 15px;
         }
         
         .function-desc-mega {
-            font-size: 1.2em;
-            line-height: 1.8;
+            font-size: 1.05em;
+            line-height: 1.6;
             opacity: 0.9;
         }
         
         .function-desc-mega strong {
             color: #00fff5;
-            font-weight: 700;
         }
         
-        /* Platform Badges */
-        .platforms-section {
-            text-align: center;
-            margin: 80px 0;
-        }
-        
-        .platforms-grid {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin: 70px 0;
-            flex-wrap: wrap;
-        }
-        
-        .platform-badge {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
-            padding: 50px 70px;
-            border-radius: 30px;
-            font-size: 2.5em;
-            font-weight: 900;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            min-width: 250px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        .platform-badge::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease;
-        }
-        
-        .platform-badge:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .platform-badge:hover {
-            transform: scale(1.15) rotate(-2deg);
-        }
-        
-        .platform-badge.available {
-            border-color: #4ade80;
-            color: #4ade80;
-            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
-        }
-        
-        .platform-badge.available:hover {
-            box-shadow: 0 0 60px rgba(74, 222, 128, 0.5);
-        }
-        
-        .platform-badge.coming-soon {
-            border-color: #fbbf24;
-            color: #fbbf24;
-            box-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
-        }
-        
-        .platform-badge.coming-soon:hover {
-            box-shadow: 0 0 60px rgba(251, 191, 36, 0.5);
-        }
-        
-        /* Closing Epic */
-        .closing-epic {
-            text-align: center;
-            font-size: 3.5em;
-            font-weight: 300;
-            line-height: 1.6;
-            padding: 100px 80px;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
-            backdrop-filter: blur(30px);
-            border-radius: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-        
-        .closing-epic::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #007479, #00fff5, #ffd700, #007479);
-            border-radius: 40px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            background-size: 300% 300%;
-            animation: gradientMove 3s ease infinite;
-        }
-        
-        @keyframes gradientMove {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .closing-epic:hover::before {
-            opacity: 0.5;
-        }
-        
-        .closing-epic strong {
-            color: #ffd700;
-            font-weight: 800;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-        
-        /* Roadmap Section */
         .roadmap-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 35px;
-            margin: 60px 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 40px 0;
         }
         
         .roadmap-item {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 255, 255, 0.05) 100%);
-            border-radius: 25px;
-            padding: 35px;
+            border-radius: 20px;
+            padding: 25px;
             border: 2px solid rgba(255, 255, 255, 0.15);
             display: flex;
-            gap: 25px;
-            align-items: flex-start;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .roadmap-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-            transition: left 0.6s ease;
-        }
-        
-        .roadmap-item:hover::before {
-            left: 100%;
+            gap: 20px;
+            transition: all 0.4s ease;
         }
         
         .roadmap-item:hover {
-            transform: translateX(10px) scale(1.03);
+            transform: translateX(8px);
             border-color: #00fff5;
-            box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.4),
-                0 0 40px rgba(0, 255, 255, 0.2);
         }
         
         .roadmap-item.priority-high {
@@ -573,45 +375,26 @@
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
         }
         
-        .roadmap-item.priority-high:hover {
-            border-color: #ffd700;
-            box-shadow: 
-                0 25px 60px rgba(0, 0, 0, 0.5),
-                0 0 50px rgba(255, 215, 0, 0.4);
-        }
-        
         .roadmap-icon {
-            font-size: 3.5em;
-            min-width: 80px;
+            font-size: 3em;
+            min-width: 60px;
             text-align: center;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
-            transition: transform 0.4s ease;
-        }
-        
-        .roadmap-item:hover .roadmap-icon {
-            transform: scale(1.2) rotate(5deg);
-        }
-        
-        .roadmap-content {
-            flex: 1;
         }
         
         .roadmap-title {
-            font-size: 1.6em;
+            font-size: 1.4em;
             font-weight: 800;
             color: #00fff5;
-            margin-bottom: 12px;
-            text-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            margin-bottom: 8px;
         }
         
         .roadmap-item.priority-high .roadmap-title {
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
         }
         
         .roadmap-desc {
-            font-size: 1.05em;
-            line-height: 1.6;
+            font-size: 0.95em;
+            line-height: 1.5;
             opacity: 0.9;
         }
         
@@ -619,364 +402,154 @@
             display: inline-block;
             background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
             color: #000;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.85em;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 0.75em;
             font-weight: 800;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            margin-top: 10px;
             animation: pulse-badge 2s ease-in-out infinite;
         }
         
         @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .platforms-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 50px 0 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .platform-badge {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
+            padding: 40px 60px;
+            border-radius: 25px;
+            font-size: 2.2em;
+            font-weight: 900;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            min-width: 220px;
+            transition: all 0.5s ease;
+        }
+        
+        .platform-badge:hover {
+            transform: scale(1.15);
+        }
+        
+        .platform-badge.available {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+        
+        .platform-badge.coming-soon {
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
+        
+        .closing-epic {
+            text-align: center;
+            font-size: 3em;
+            font-weight: 300;
+            line-height: 1.6;
+            padding: 80px 60px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+            backdrop-filter: blur(30px);
+            border-radius: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+        
+        .closing-epic strong {
+            color: #ffd700;
+            font-weight: 800;
         }
         
         @media (max-width: 1200px) {
-            .hero h1 { font-size: 5em; }
-            h2 { font-size: 3.5em; }
-            .functions-mega { grid-template-columns: 1fr; }
-            .roadmap-container { grid-template-columns: 1fr; }
+            .modules-modern { grid-template-columns: repeat(2, 1fr); }
+            .functions-mega, .roadmap-container { grid-template-columns: 1fr; }
         }
         
         @media (max-width: 768px) {
             .hero h1 { font-size: 3.5em; }
-            .hero .tagline { font-size: 1.5em; }
-            h2 { font-size: 2.5em; }
             .nested-3d { margin-left: 20px; }
-            .modules-modern,
-            .functions-mega,
-            .roadmap-container { grid-template-columns: 1fr; }
-            .closing-epic {
-                font-size: 2em;
-                padding: 60px 30px;
-            }
-            .glass-card { padding: 30px; }
-            .roadmap-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            .roadmap-icon {
-                min-width: 100%;
-            }
+            .modules-modern { grid-template-columns: 1fr; }
+            .nav-button { width: 50px; height: 50px; font-size: 1.8em; }
+            .nav-button.prev { left: 15px; }
+            .nav-button.next { right: 15px; }
+            .glass-card { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
     <div class="bg-animated"></div>
 
-    <!-- Slide 1: Hero Epic -->
-    <div class="slide">
-        <div class="container">
-            <div class="hero">
-                <h1>TopTrack</h1>
-                <p class="tagline">"Del campo al reporte, todo en tiempo real"</p>
-                <p class="agency-name">TopMktGroup</p>
-            </div>
-        </div>
+    <div class="slides-container">
+        <div class="slides-wrapper" id="slidesWrapper"></div>
     </div>
 
-    <!-- Slide 2: Estructura Operativa 3D -->
-    <div class="slide">
-        <div class="container">
-            <div class="glass-card">
-                <h2>Estructura Operativa</h2>
-                
-                <div class="hierarchy-3d">
-                    <!-- Empresa -->
-                    <div class="level-3d">
-                        <div class="level-box">
-                            <div class="level-header">
-                                <span class="level-icon">🏢</span>
-                                <span class="level-title">Empresa</span>
-                            </div>
-                            
-                            <!-- Campañas -->
-                            <div class="nested-3d">
-                                <div class="level-box">
-                                    <div class="level-header">
-                                        <span class="level-icon">📊</span>
-                                        <span class="level-title">Campañas</span>
-                                    </div>
-                                    
-                                    <div class="items-grid">
-                                        <div class="grid-item">📦 Inventario</div>
-                                        <div class="grid-item">🏪 Tiendas</div>
-                                    </div>
-                                    
-                                    <!-- Coordinadores -->
-                                    <div class="nested-3d">
-                                        <div class="level-box">
-                                            <div class="level-header">
-                                                <span class="level-icon">👔</span>
-                                                <span class="level-title">Coordinadores</span>
-                                            </div>
-                                            
-                                            <!-- Supervisores -->
-                                            <div class="nested-3d">
-                                                <div class="level-box">
-                                                    <div class="level-header">
-                                                        <span class="level-icon">👨‍💼</span>
-                                                        <span class="level-title">Supervisores</span>
-                                                    </div>
-                                                    
-                                                    <!-- Personal de Campo -->
-                                                    <div class="items-grid">
-                                                        <div class="grid-item">👥 Implant</div>
-                                                        <div class="grid-item">👥 Demostradora</div>
-                                                        <div class="grid-item">👥 Promotor</div>
-                                                        <div class="grid-item">👥 Rep. Médico</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <button class="nav-button prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+    <button class="nav-button next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    <div class="slide-counter" id="counter">1 / 7</div>
 
-    <!-- Slide 3: Módulos Ultra Modern -->
-    <div class="slide">
-        <div class="container">
-            <div class="glass-card">
-                <h2>Módulos</h2>
-                
-                <div class="modules-modern">
-                    <div class="module-modern">
-                        <div class="module-icon-modern">🏢</div>
-                        <div class="module-title-modern">Empresa</div>
-                        <div class="module-subtitle-modern">Datos básicos</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">📊</div>
-                        <div class="module-title-modern">Campañas</div>
-                        <div class="module-subtitle-modern">Inventario de producto, competencia y material POP</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">🛠️</div>
-                        <div class="module-title-modern">Servicios Predefinidos</div>
-                        <div class="module-subtitle-modern">Frentes, Material POP, Ventas, Competencia, Ventas en Dinero</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">👔</div>
-                        <div class="module-title-modern">Coordinadores</div>
-                        <div class="module-subtitle-modern">Datos y ubicación precisa</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">👨‍💼</div>
-                        <div class="module-title-modern">Supervisores</div>
-                        <div class="module-subtitle-modern">Datos y ubicación precisa</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">👥</div>
-                        <div class="module-title-modern">Personal de Campo</div>
-                        <div class="module-subtitle-modern">Datos y ubicación precisa</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">⏰</div>
-                        <div class="module-title-modern">Asistencias</div>
-                        <div class="module-subtitle-modern">Registro diario</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">📍</div>
-                        <div class="module-title-modern">Servicios</div>
-                        <div class="module-subtitle-modern">Check-In, Servicios Predefinidos, Check-Out</div>
-                    </div>
-                    
-                    <div class="module-modern">
-                        <div class="module-icon-modern">🔧</div>
-                        <div class="module-title-modern">Recursos</div>
-                        <div class="module-subtitle-modern">Cadenas, Códigos Postales del SPM</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        const slides = [
+            `<div class="slide"><div class="container"><div class="hero"><h1>TopTrack</h1><p class="tagline">"Del campo al reporte, todo en tiempo real"</p><p class="agency-name">TopMktGroup</p></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="glass-card"><h2>Estructura Operativa</h2><div class="level-box"><div class="level-header"><span class="level-icon">🏢</span><span class="level-title">Empresa</span></div><div class="nested-3d"><div class="level-box"><div class="level-header"><span class="level-icon">📊</span><span class="level-title">Campañas</span></div><div class="items-grid"><div class="grid-item">📦 Inventario</div><div class="grid-item">🏪 Tiendas</div></div><div class="nested-3d"><div class="level-box"><div class="level-header"><span class="level-icon">👔</span><span class="level-title">Coordinadores</span></div><div class="nested-3d"><div class="level-box"><div class="level-header"><span class="level-icon">👨‍💼</span><span class="level-title">Supervisores</span></div><div class="items-grid"><div class="grid-item">👥 Implant</div><div class="grid-item">👥 Demostradora</div><div class="grid-item">👥 Promotor</div><div class="grid-item">👥 Rep. Médico</div></div></div></div></div></div></div></div></div></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="glass-card"><h2>Módulos</h2><div class="modules-modern"><div class="module-modern"><div class="module-icon-modern">🏢</div><div class="module-title-modern">Empresa</div><div class="module-subtitle-modern">Datos básicos</div></div><div class="module-modern"><div class="module-icon-modern">📊</div><div class="module-title-modern">Campañas</div><div class="module-subtitle-modern">Inventario de producto, competencia y material POP</div></div><div class="module-modern"><div class="module-icon-modern">🛠️</div><div class="module-title-modern">Servicios Predefinidos</div><div class="module-subtitle-modern">Frentes, Material POP, Ventas, Competencia, Ventas en Dinero</div></div><div class="module-modern"><div class="module-icon-modern">👔</div><div class="module-title-modern">Coordinadores</div><div class="module-subtitle-modern">Datos y ubicación precisa</div></div><div class="module-modern"><div class="module-icon-modern">👨‍💼</div><div class="module-title-modern">Supervisores</div><div class="module-subtitle-modern">Datos y ubicación precisa</div></div><div class="module-modern"><div class="module-icon-modern">👥</div><div class="module-title-modern">Personal de Campo</div><div class="module-subtitle-modern">Datos y ubicación precisa</div></div><div class="module-modern"><div class="module-icon-modern">⏰</div><div class="module-title-modern">Asistencias</div><div class="module-subtitle-modern">Registro diario</div></div><div class="module-modern"><div class="module-icon-modern">📍</div><div class="module-title-modern">Servicios</div><div class="module-subtitle-modern">Check-In, Servicios Predefinidos, Check-Out</div></div><div class="module-modern"><div class="module-icon-modern">🔧</div><div class="module-title-modern">Recursos</div><div class="module-subtitle-modern">Cadenas, Códigos Postales del SPM</div></div></div></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="glass-card"><h2>Funciones Principales</h2><div class="functions-mega"><div class="function-mega"><div class="function-icon-mega">⏰</div><div class="function-title-mega">Asistencia Diaria</div><div class="function-desc-mega"><strong>Automática:</strong> Registro basado en primer Check-In y último Check-Out del día<br><br><strong>Semiautomática:</strong> Confirmación manual</div></div><div class="function-mega"><div class="function-icon-mega">📍</div><div class="function-title-mega">Proceso de Servicios</div><div class="function-desc-mega"><strong>Check-In</strong> → <strong>Servicios Predefinidos</strong> → <strong>Check-Out</strong></div></div><div class="function-mega"><div class="function-icon-mega">📊</div><div class="function-title-mega">Importación Masiva CSV</div><div class="function-desc-mega">Carga rápida de <strong>Tiendas</strong> y <strong>Personal de Campo</strong></div></div><div class="function-mega"><div class="function-icon-mega">🔐</div><div class="function-title-mega">Permisos Dinámicos</div><div class="function-desc-mega">Control de acceso por usuario</div></div><div class="function-mega"><div class="function-icon-mega">🗺️</div><div class="function-title-mega">Servicio Postal Mexicano</div><div class="function-desc-mega">Conexión directa con códigos postales del SPM</div></div></div></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="glass-card"><h2>Disponibilidad</h2><div class="platforms-grid"><div class="platform-badge available">✓ Android</div><div class="platform-badge available">✓ Web</div><div class="platform-badge coming-soon">⌛ iOS</div></div><p style="text-align: center; font-size: 1.8em; margin-top: 30px;">Próxima expansión a App Store</p></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="glass-card"><h2>Roadmap 2025</h2><div class="roadmap-container"><div class="roadmap-item priority-high"><div class="roadmap-icon">✍️</div><div class="roadmap-content"><div class="roadmap-title">Firma Digital de Contratos</div><div class="roadmap-desc">Personal de campo firma su contrato directamente en la app con validación legal completa</div><div class="priority-badge">PRIORIDAD ALTA</div></div></div><div class="roadmap-item"><div class="roadmap-icon">🤖</div><div class="roadmap-content"><div class="roadmap-title">Asistente con IA</div><div class="roadmap-desc">Responde preguntas sobre campañas vía WhatsApp, web o llamada telefónica</div></div></div><div class="roadmap-item"><div class="roadmap-icon">📊</div><div class="roadmap-content"><div class="roadmap-title">Dashboards y Reportes Avanzados</div><div class="roadmap-desc">Visualización completa de todos los servicios predefinidos con métricas en tiempo real</div></div></div><div class="roadmap-item"><div class="roadmap-icon">🏆</div><div class="roadmap-content"><div class="roadmap-title">Sistema de Logros y Ranking</div><div class="roadmap-desc">Gamificación con medallas, logros y ranking en vivo para motivar al personal de campo</div></div></div><div class="roadmap-item"><div class="roadmap-icon">📈</div><div class="roadmap-content"><div class="roadmap-title">KPIs por Servicio Predefinido</div><div class="roadmap-desc">Métricas específicas de rendimiento para cada tipo de servicio</div></div></div><div class="roadmap-item"><div class="roadmap-icon">🔔</div><div class="roadmap-content"><div class="roadmap-title">Notificaciones Push Inteligentes</div><div class="roadmap-desc">Alertas en tiempo real sobre el estado de tu personal de campo</div></div></div><div class="roadmap-item"><div class="roadmap-icon">👤</div><div class="roadmap-content"><div class="roadmap-title">Autoregistro de Personal</div><div class="roadmap-desc">Personal se registra en la app y recibe contraseña por WhatsApp automáticamente</div></div></div><div class="roadmap-item"><div class="roadmap-icon">📧</div><div class="roadmap-content"><div class="roadmap-title">Credenciales por Email</div><div class="roadmap-desc">Usuarios administrativos reciben contraseñas de acceso por correo electrónico</div></div></div><div class="roadmap-item"><div class="roadmap-icon">🎓</div><div class="roadmap-content"><div class="roadmap-title">Centro de Tutoriales</div><div class="roadmap-desc">Módulo integrado con guías paso a paso para dominar cada función de la app</div></div></div></div></div></div></div>`,
+            
+            `<div class="slide"><div class="container"><div class="closing-epic"><p>"<strong>TopTrack</strong>: La evolución digital de tu operación en campo"</p></div></div></div>`
+        ];
 
-    <!-- Slide 4: Funciones Principales Mega -->
-    <div class="slide">
-        <div class="container">
-            <div class="glass-card">
-                <h2>Funciones Principales</h2>
-                
-                <div class="functions-mega">
-                    <div class="function-mega">
-                        <div class="function-icon-mega">⏰</div>
-                        <div class="function-title-mega">Asistencia Diaria</div>
-                        <div class="function-desc-mega">
-                            <strong>Automática:</strong> Registro basado en primer Check-In y último Check-Out del día
-                            <br><br>
-                            <strong>Semiautomática:</strong> Confirmación manual
-                        </div>
-                    </div>
-                    
-                    <div class="function-mega">
-                        <div class="function-icon-mega">📍</div>
-                        <div class="function-title-mega">Proceso de Servicios</div>
-                        <div class="function-desc-mega">
-                            <strong>Check-In</strong> → <strong>Servicios Predefinidos</strong> → <strong>Check-Out</strong>
-                        </div>
-                    </div>
-                    
-                    <div class="function-mega">
-                        <div class="function-icon-mega">📊</div>
-                        <div class="function-title-mega">Importación Masiva CSV</div>
-                        <div class="function-desc-mega">
-                            Carga rápida de <strong>Tiendas</strong> y <strong>Personal de Campo</strong>
-                        </div>
-                    </div>
-                    
-                    <div class="function-mega">
-                        <div class="function-icon-mega">🔐</div>
-                        <div class="function-title-mega">Permisos Dinámicos</div>
-                        <div class="function-desc-mega">
-                            Control de acceso por usuario
-                        </div>
-                    </div>
-                    
-                    <div class="function-mega">
-                        <div class="function-icon-mega">🗺️</div>
-                        <div class="function-title-mega">Servicio Postal Mexicano</div>
-                        <div class="function-desc-mega">
-                            Conexión directa con códigos postales del SPM
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        let currentSlide = 0;
+        const wrapper = document.getElementById('slidesWrapper');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const counter = document.getElementById('counter');
 
-    <!-- Slide 5: Plataformas -->
-    <div class="slide">
-        <div class="container">
-            <div class="glass-card">
-                <h2>Disponibilidad</h2>
-                
-                <div class="platforms-section">
-                    <div class="platforms-grid">
-                        <div class="platform-badge available">
-                            ✓ Android
-                        </div>
-                        <div class="platform-badge available">
-                            ✓ Web
-                        </div>
-                        <div class="platform-badge coming-soon">
-                            ⌛ iOS
-                        </div>
-                    </div>
-                    
-                    <p style="font-size: 1.8em; opacity: 0.9;">
-                        Próxima expansión a App Store
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+        wrapper.innerHTML = slides.join('');
 
-    <!-- Slide 6: Roadmap Futuro -->
-    <div class="slide">
-        <div class="container">
-            <div class="glass-card">
-                <h2>Roadmap 2026</h2>
-                
-                <div class="roadmap-container">
-                    <div class="roadmap-item priority-high">
-                        <div class="roadmap-icon">✍️</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Firma Digital de Contratos</div>
-                            <div class="roadmap-desc">Personal de campo firma su contrato directamente en la app con validación legal completa</div>
-                            <div class="priority-badge">PRIORIDAD ALTA</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">🤖</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Asistente con IA</div>
-                            <div class="roadmap-desc">Responde preguntas sobre campañas vía WhatsApp, web o llamada telefónica</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">📊</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Dashboards y Reportes Avanzados</div>
-                            <div class="roadmap-desc">Visualización completa de todos los servicios predefinidos con métricas en tiempo real</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">🏆</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Sistema de Logros y Ranking</div>
-                            <div class="roadmap-desc">Gamificación con medallas, logros y ranking en vivo para motivar al personal de campo</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">📈</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">KPIs por Servicio Predefinido</div>
-                            <div class="roadmap-desc">Métricas específicas de rendimiento para cada tipo de servicio</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">🔔</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Notificaciones Push Inteligentes</div>
-                            <div class="roadmap-desc">Alertas en tiempo real sobre el estado de tu personal de campo</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">👤</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Autoregistro de Personal</div>
-                            <div class="roadmap-desc">Personal se registra en la app y recibe contraseña por WhatsApp automáticamente</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">📧</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Credenciales por Email</div>
-                            <div class="roadmap-desc">Usuarios administrativos reciben contraseñas de acceso por correo electrónico</div>
-                        </div>
-                    </div>
-                    
-                    <div class="roadmap-item">
-                        <div class="roadmap-icon">🎓</div>
-                        <div class="roadmap-content">
-                            <div class="roadmap-title">Centro de Tutoriales</div>
-                            <div class="roadmap-desc">Módulo integrado con guías paso a paso para dominar cada función de la app</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        function updateSlide() {
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            counter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
 
-    <!-- Slide 7: Cierre Épico -->
-    <div class="slide">
-        <div class="container">
-            <div class="closing-epic">
-                <p>"<strong>TopTrack</strong>: La evolución digital de tu operación en campo"</p>
-            </div>
-        </div>
-    </div>
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            } else if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        });
+
+        updateSlide();
+    </script>
 </body>
 </html>
