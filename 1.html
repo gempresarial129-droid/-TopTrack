@@ -524,10 +524,120 @@
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
         }
         
+        /* Roadmap Section */
+        .roadmap-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 35px;
+            margin: 60px 0;
+        }
+        
+        .roadmap-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 255, 255, 0.05) 100%);
+            border-radius: 25px;
+            padding: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .roadmap-item:hover::before {
+            left: 100%;
+        }
+        
+        .roadmap-item:hover {
+            transform: translateX(10px) scale(1.03);
+            border-color: #00fff5;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(0, 255, 255, 0.2);
+        }
+        
+        .roadmap-item.priority-high {
+            border: 3px solid #ffd700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+        
+        .roadmap-item.priority-high:hover {
+            border-color: #ffd700;
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 50px rgba(255, 215, 0, 0.4);
+        }
+        
+        .roadmap-icon {
+            font-size: 3.5em;
+            min-width: 80px;
+            text-align: center;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+            transition: transform 0.4s ease;
+        }
+        
+        .roadmap-item:hover .roadmap-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .roadmap-content {
+            flex: 1;
+        }
+        
+        .roadmap-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #00fff5;
+            margin-bottom: 12px;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+        
+        .roadmap-item.priority-high .roadmap-title {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .roadmap-desc {
+            font-size: 1.05em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .priority-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 800;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
+        }
+        
         @media (max-width: 1200px) {
             .hero h1 { font-size: 5em; }
             h2 { font-size: 3.5em; }
             .functions-mega { grid-template-columns: 1fr; }
+            .roadmap-container { grid-template-columns: 1fr; }
         }
         
         @media (max-width: 768px) {
@@ -536,12 +646,20 @@
             h2 { font-size: 2.5em; }
             .nested-3d { margin-left: 20px; }
             .modules-modern,
-            .functions-mega { grid-template-columns: 1fr; }
+            .functions-mega,
+            .roadmap-container { grid-template-columns: 1fr; }
             .closing-epic {
                 font-size: 2em;
                 padding: 60px 30px;
             }
             .glass-card { padding: 30px; }
+            .roadmap-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            .roadmap-icon {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
@@ -768,7 +886,91 @@
         </div>
     </div>
 
-    <!-- Slide 6: Cierre Épico -->
+    <!-- Slide 6: Roadmap Futuro -->
+    <div class="slide">
+        <div class="container">
+            <div class="glass-card">
+                <h2>Roadmap 2025</h2>
+                
+                <div class="roadmap-container">
+                    <div class="roadmap-item priority-high">
+                        <div class="roadmap-icon">✍️</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Firma Digital de Contratos</div>
+                            <div class="roadmap-desc">Personal de campo firma su contrato directamente en la app con validación legal completa</div>
+                            <div class="priority-badge">PRIORIDAD ALTA</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">🤖</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Asistente con IA</div>
+                            <div class="roadmap-desc">Responde preguntas sobre campañas vía WhatsApp, web o llamada telefónica</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">📊</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Dashboards y Reportes Avanzados</div>
+                            <div class="roadmap-desc">Visualización completa de todos los servicios predefinidos con métricas en tiempo real</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">🏆</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Sistema de Logros y Ranking</div>
+                            <div class="roadmap-desc">Gamificación con medallas, logros y ranking en vivo para motivar al personal de campo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">📈</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">KPIs por Servicio Predefinido</div>
+                            <div class="roadmap-desc">Métricas específicas de rendimiento para cada tipo de servicio</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">🔔</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Notificaciones Push Inteligentes</div>
+                            <div class="roadmap-desc">Alertas en tiempo real sobre el estado de tu personal de campo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">👤</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Autoregistro de Personal</div>
+                            <div class="roadmap-desc">Personal se registra en la app y recibe contraseña por WhatsApp automáticamente</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">📧</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Credenciales por Email</div>
+                            <div class="roadmap-desc">Usuarios administrativos reciben contraseñas de acceso por correo electrónico</div>
+                        </div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-icon">🎓</div>
+                        <div class="roadmap-content">
+                            <div class="roadmap-title">Centro de Tutoriales</div>
+                            <div class="roadmap-desc">Módulo integrado con guías paso a paso para dominar cada función de la app</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Cierre Épico -->
     <div class="slide">
         <div class="container">
             <div class="closing-epic">
