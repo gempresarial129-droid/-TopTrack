@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap TopTrack 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007479;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 116, 121, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .print-button:hover {
+            background: #005a5e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 116, 121, 0.4);
+        }
+        
+        /* Tamaño carta: 8.5in x 11in */
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 0.75in;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+        
+        /* Página horizontal para el Gantt */
+        .page-landscape {
+            width: 11in;
+            min-height: 8.5in;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 0.5in;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #007479;
+        }
+        
+        .header h1 {
+            font-size: 32pt;
+            font-weight: 800;
+            color: #007479;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 14pt;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        h2 {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #007479;
+            margin: 30px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+            page-break-after: avoid;
+        }
+        
+        h3 {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #005a5e;
+            margin: 20px 0 10px;
+            page-break-after: avoid;
+        }
+        
+        h4 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 15px 0 8px;
+            page-break-after: avoid;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            font-size: 10pt;
+            color: #333;
+            text-align: justify;
+        }
+        
+        ul {
+            margin: 10px 0 15px 20px;
+            page-break-inside: avoid;
+        }
+        
+        li {
+            margin-bottom: 6px;
+            font-size: 10pt;
+            color: #333;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            page-break-inside: avoid;
+        }
+        
+        .note strong {
+            color: #856404;
+        }
+        
+        /* Gantt Chart */
+        .gantt-section {
+            margin: 30px 0;
+            page-break-inside: avoid;
+        }
+        
+        .gantt-title {
+            font-size: 16pt;
+            font-weight: 700;
+            color: #007479;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .gantt-container {
+            overflow-x: auto;
+            border: 2px solid #007479;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .gantt-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+        }
+        
+        .gantt-table th {
+            background: #007479;
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            border-right: 1px solid #005a5e;
+        }
+        
+        .gantt-table th:first-child {
+            text-align: left;
+            width: 220px;
+            background: #007479;
+        }
+        
+        .gantt-table td {
+            padding: 12px 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .gantt-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background: #f8f9fa;
+            border-right: 2px solid #007479;
+        }
+        
+        .gantt-bar {
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 9pt;
+            color: white;
+            display: inline-block;
+            min-width: 50px;
+        }
+        
+        .month-1 { background: #4a90e2; }
+        .month-2 { background: #50c878; }
+        .month-3 { background: #f39c12; }
+        
+        .month-header {
+            background: #f8f9fa !important;
+            font-weight: 700;
+            color: #1a1a1a !important;
+            text-align: center !important;
+            font-size: 10pt;
+            padding: 12px 8px !important;
+        }
+        
+        .month-1-header { border-left: 4px solid #4a90e2; }
+        .month-2-header { border-left: 4px solid #50c878; }
+        .month-3-header { border-left: 4px solid #f39c12; }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 9pt;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 18px;
+            border-radius: 3px;
+        }
+        
+        .summary-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            border: 2px solid #007479;
+            border-radius: 8px;
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+        
+        .summary-table th {
+            background: #007479;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11pt;
+        }
+        
+        .summary-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 10pt;
+        }
+        
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .summary-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .page {
+                width: 8.5in;
+                height: 11in;
+                margin: 0;
+                padding: 0.75in;
+                box-shadow: none;
+                page-break-after: always;
+            }
+            
+            .page-landscape {
+                width: 11in;
+                height: 8.5in;
+                margin: 0;
+                padding: 0.5in;
+                box-shadow: none;
+                page-break-after: always;
+            }
+            
+            .page:last-child, .page-landscape:last-child {
+                page-break-after: auto;
+            }
+            
+            h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            
+            ul, .note, .gantt-section, .summary-table {
+                page-break-inside: avoid;
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+        
+        @page {
+            size: letter portrait;
+            margin: 0;
+        }
+        
+        @page :nth(4) {
+            size: letter landscape;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">🖨️ Imprimir</button>
+    
+    <!-- Página 1 -->
+    <div class="page">
+        <div class="header">
+            <h1>Roadmap 2026</h1>
+            <p class="subtitle">Primeros 3 Meses - TopTrack</p>
+        </div>
+        
+        <p>Este roadmap se enfoca en mejorar la visualización de la información, formalizar procesos clave y aumentar la adopción de la app, tanto por usuarios administrativos como por el personal de campo.</p>
+        
+        <h2>Dashboard</h2>
+        <p>Se desarrollará un dashboard interactivo que permita visualizar de forma clara la relación entre:</p>
+        <ul>
+            <li>El cliente</li>
+            <li>Su personal de campo</li>
+            <li>Los servicios predefinidos</li>
+        </ul>
+        <p>El dashboard contará con un mínimo de 2 métricas por cada servicio predefinido, permitiendo al usuario:</p>
+        <ul>
+            <li>Consultar el estado general de la campaña</li>
+            <li>Identificar avances y pendientes</li>
+            <li>Tener una vista rápida del desempeño sin necesidad de exportar reportes</li>
+        </ul>
+        <p>Este dashboard será un punto central de consulta para supervisores, coordinadores y clientes.</p>
+        
+        <h2>Reportes</h2>
+        <p>Se habilitará la generación de reportes en PDF y XLSX, con las siguientes características:</p>
+        <ul>
+            <li>Selección de rango de fechas</li>
+            <li>Selección de servicios de la campaña a incluir</li>
+        </ul>
+        <p>Solo se trabajará con:</p>
+        <ul>
+            <li>1 reporte "master" en PDF</li>
+            <li>1 reporte "master" en XLSX</li>
+        </ul>
+        <p>Ambos reportes incluirán todos los servicios predefinidos, y el usuario podrá decidir qué servicios desea mostrar en cada generación de reporte. Esto garantiza consistencia en la información y simplifica el mantenimiento de los formatos.</p>
+        
+        <h2>KPIs por Servicio Predefinido</h2>
+        <p>Para cada servicio predefinido se definirá al menos 1 KPI, el cual será:</p>
+        <ul>
+            <li>Solicitado directamente por el ejecutivo de cuenta o director de área</li>
+            <li>Acorde al tipo de servicio y a los objetivos de la campaña</li>
+        </ul>
+        <p>Estos KPIs permitirán evaluar el desempeño de forma específica, evitando métricas genéricas y facilitando la toma de decisiones basada en datos.</p>
+    </div>
+    
+    <!-- Página 2 -->
+    <div class="page">
+        <h2>Auto registro de Personal de Campo</h2>
+        <p>Se habilitará un proceso de autoregistro dentro de la app, donde el personal de campo podrá registrarse de forma directa.</p>
+        <p>Una vez completado el registro:</p>
+        <ul>
+            <li>El usuario recibirá sus credenciales de acceso automáticamente por WhatsApp</li>
+        </ul>
+        <p>Durante el registro se solicitarán únicamente datos básicos, incluyendo:</p>
+        <ul>
+            <li>Supervisor asignado</li>
+            <li>Datos generales (Rol, Nombre y apellidos, Fotografía)</li>
+            <li>Datos de contacto (Correo electrónico, Teléfono)</li>
+            <li>Dirección (Código postal, Estado, ciudad y municipio, Asentamiento, Dirección completa)</li>
+        </ul>
+        <p>Este proceso busca reducir tiempos administrativos y facilitar el alta de personal.</p>
+        
+        <h2>Firma Digital de Contratos</h2>
+        <p>El personal de campo podrá firmar su contrato directamente desde la app, contando con validación legal.</p>
+        <h4>Flujo general:</h4>
+        <ul>
+            <li>El personal firma su contrato en la app</li>
+            <li>Una vez firmado, recibe por correo electrónico:
+                <ul>
+                    <li>Un mensaje de bienvenida a la agencia (TopMktGroup)</li>
+                    <li>El contrato firmado como archivo adjunto</li>
+                </ul>
+            </li>
+        </ul>
+        <p>El administrador o un usuario con permisos podrá:</p>
+        <ul>
+            <li>Subir el contrato base</li>
+            <li>Modificarlo utilizando variables para adaptarlo a cada persona</li>
+        </ul>
+        <p>Esto permite centralizar y formalizar el proceso contractual.</p>
+        
+        <h2>Credenciales de Acceso por Correo y WhatsApp</h2>
+        <p>El envío de credenciales se manejará de la siguiente forma:</p>
+        <ul>
+            <li><strong>Usuarios administrativos:</strong> recibirán sus accesos por correo electrónico, con un mensaje formal.</li>
+            <li><strong>Personal de campo:</strong> recibirá sus accesos por WhatsApp, con un mensaje más informal y directo.</li>
+        </ul>
+        <p>Cada canal se adapta al tipo de usuario y a su forma habitual de comunicación.</p>
+        
+        <h2>Sistema de Logros y Ranking</h2>
+        <p>Se desarrollará un módulo de logros y ranking con el objetivo de incentivar el uso de la aplicación y el cumplimiento operativo.</p>
+        
+        <h3>Objetivo del módulo</h3>
+        <p>No se trata de "jugar", sino de:</p>
+        <ul>
+            <li>Aumentar el cumplimiento operativo</li>
+            <li>Reducir ausencias y errores</li>
+            <li>Mejorar la calidad de la información y evidencia capturada</li>
+            <li>Generar comparativos por persona y por campaña</li>
+        </ul>
+        <p>Si no impacta estos puntos, el módulo no cumple su función.</p>
+    </div>
+    
+    <!-- Página 3 -->
+    <div class="page">
+        <h3>Concepto del sistema</h3>
+        <p>El sistema se basará en tres elementos:</p>
+        <ul>
+            <li>Logros o medallas, como reconocimiento individual</li>
+            <li>Puntos, como medida cuantificable del desempeño</li>
+            <li>Ranking, para mostrar posiciones y fomentar una competencia sana</li>
+        </ul>
+        <p>Todo se basará en acciones reales dentro del flujo normal de la app.</p>
+        
+        <h3>Tipos de logros</h3>
+        
+        <h4>Logros de asistencia</h4>
+        <p>Relacionados con check-in y check-out:</p>
+        <ul>
+            <li>Puntualidad</li>
+            <li>Asistencia completa</li>
+            <li>Constancia</li>
+            <li>Mes completo sin faltas</li>
+        </ul>
+        
+        <h4>Logros operativos (servicios)</h4>
+        <p>Relacionados con la correcta ejecución de servicios:</p>
+        <ul>
+            <li>Registro completo de POP</li>
+            <li>Reportes sin campos vacíos</li>
+            <li>Evidencia fotográfica válida</li>
+            <li>Servicios completados en el tiempo esperado</li>
+        </ul>
+        
+        <h4>Logros por KPI</h4>
+        <p>Basados en el cumplimiento de los KPIs definidos por servicio, traducidos a logros fáciles de entender para el usuario.</p>
+        
+        <h4>Logros de conducta</h4>
+        <p>Relacionados con el uso continuo de la app y la permanencia del personal:</p>
+        <ul>
+            <li>Primer mes completo</li>
+            <li>Uso de tutoriales</li>
+            <li>Reconocimientos periódicos como "mejor del mes"</li>
+        </ul>
+        
+        <h2>Asistente con IA</h2>
+        <p>Se desarrollará un chat asistente con IA que permitirá responder preguntas relacionadas con:</p>
+        <ul>
+            <li>Campañas</li>
+            <li>Servicios</li>
+            <li>Información general de la operación</li>
+        </ul>
+        <p>Este asistente estará disponible vía:</p>
+        <ul>
+            <li>WhatsApp</li>
+            <li>Chat web</li>
+        </ul>
+        <p>Su objetivo es facilitar el acceso a la información sin depender de consultas manuales.</p>
+        
+        <h2>Centro de Tutoriales</h2>
+        <p>Se creará un módulo de tutoriales integrado dentro de la app, con guías paso a paso que ayuden a los usuarios a:</p>
+        <ul>
+            <li>Entender el uso correcto de cada módulo</li>
+            <li>Reducir errores operativos</li>
+            <li>Mejorar la adopción de la aplicación</li>
+        </ul>
+        
+        <div class="note">
+            <strong>Nota importante:</strong> Todos los servicios adicionales consumidos para estas funcionalidades deberán ser pagados por la agencia, incluyendo: Servidor para alojar automatizaciones, Chatbot y servicios de IA, API de WhatsApp.
+        </div>
+    </div>
+    
+    <!-- Página 4 - Gantt Chart HORIZONTAL -->
+    <div class="page-landscape">
+        <div class="gantt-section">
+            <h2 class="gantt-title">Calendario de Implementación - Diagrama de Gantt</h2>
+            
+            <div class="gantt-container">
+                <table class="gantt-table">
+                    <thead>
+                        <tr>
+                            <th>Actividad / Semana</th>
+                            <th colspan="4" class="month-1-header">MES 1 - Métricas y Visibilidad</th>
+                            <th colspan="4" class="month-2-header">MES 2 - Formalización</th>
+                            <th colspan="4" class="month-3-header">MES 3 - Incentivos</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>S1</th>
+                            <th>S2</th>
+                            <th>S3</th>
+                            <th>S4</th>
+                            <th>S5</th>
+                            <th>S6</th>
+                            <th>S7</th>
+                            <th>S8</th>
+                            <th>S9</th>
+                            <th>S10</th>
+                            <th>S11</th>
+                            <th>S12</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Definición de KPIs</td>
+                            <td><span class="gantt-bar month-1">✓</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Implementación de KPIs</td>
+                            <td></td>
+                            <td><span class="gantt-bar month-1">Dev</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Dashboard</td>
+                            <td></td>
+                            <td><span class="gantt-bar month-1">Build</span></td>
+                            <td><span class="gantt-bar month-1">Test</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Reportes PDF/XLSX</td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-1">Dev</span></td>
+                            <td><span class="gantt-bar month-1">✓</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Autoregistro Personal</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-2">Dev</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Credenciales Email/WhatsApp</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-2">✓</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Firma Digital de Contratos</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-2">Dev</span></td>
+                            <td><span class="gantt-bar month-2">✓</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Sistema Logros y Ranking</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-3">Base</span></td>
+                            <td><span class="gantt-bar month-3">Ajust</span></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Asistente con IA</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="gantt-bar month-3">Deploy</span></td>
+                            <td><span class="gantt-bar month-3">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Centro de Tutoriales</td>
+                            <td><span class="gantt-bar month-1">→</span></td>
+                            <td><span class="gantt-bar month-1">→</span></td>
+                            <td><span class="gantt-bar month-1">→</span></td>
+                            <td><span class="gantt-bar month-1">→</span></td>
+                            <td><span class="gantt-bar month-2">→</span></td>
+                            <td><span class="gantt-bar month-2">→</span></td>
+                            <td><span class="gantt-bar month-2">→</span></td>
+                            <td><span class="gantt-bar month-2">→</span></td>
+                            <td><span class="gantt-bar month-3">→</span></td>
+                            <td><span class="gantt-bar month-3">→</span></td>
+                            <td><span class="gantt-bar month-3">→</span></td>
+                            <td><span class="gantt-bar month-3">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color month-1"></div>
+                    <span>Mes 1 - Métricas y Visibilidad</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color month-2"></div>
+                    <span>Mes 2 - Formalización</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color month-3"></div>
+                    <span>Mes 3 - Incentivos y Soporte</span>
+                </div>
+            </div>
+        </div>
+        
+        <h2>Resumen por Mes</h2>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Enfoque</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mes 1</strong></td>
+                    <td>KPIs, dashboard, reportes y capacitación</td>
+                </tr>
+                <tr>
+                    <td><strong>Mes 2</strong></td>
+                    <td>Registro, contratos y credenciales</td>
+                </tr>
+                <tr>
+                    <td><strong>Mes 3</strong></td>
+                    <td>Logros, ranking e IA</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
